@@ -214,6 +214,65 @@ namespace StudentManagement.Tests.Services
             result.Should().BeFalse(); // Should not allow deactivated students to apply
         }
 
+        [Fact]
+        public async Task GetStudentApplicationsAsync_Should_Return_Applications_If_Exist()
+        {
+            // Arrange
+            var student = new Student
+            {
+                FirstName = "Alice",
+                LastName = "Smith",
+                Email = "alice@example.com"
+            };
+
+            _dbContext.Students.Add(student);
+            await _dbContext.SaveChangesAsync();
+
+            var application1 = new StudentApplication { StudentId = student.Id, ApplicationName = "Internship", SubmissionDate = DateTime.Today };
+            var application2 = new StudentApplication { StudentId = student.Id, ApplicationName = "Scholarship", SubmissionDate = DateTime.Today };
+
+            _dbContext.Applications.AddRange(application1, application2);
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            var result = await _studentService.GetStudentApplicationsAsync(student.Id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().HaveCount(2); // ✅ Should return 2 applications
+            result.First().ApplicationName.Should().Be("Internship");
+        }
+        [Fact]
+        public async Task GetStudentApplicationsAsync_Should_Return_Empty_List_If_No_Applications()
+        {
+            // Arrange
+            var student = new Student
+            {
+                FirstName = "John",
+                LastName = "Doe",
+                Email = "john@example.com"
+            };
+
+            _dbContext.Students.Add(student);
+            await _dbContext.SaveChangesAsync();
+
+            // Act
+            var result = await _studentService.GetStudentApplicationsAsync(student.Id);
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty(); // ✅ Should return an empty list
+        }
+        [Fact]
+        public async Task GetStudentApplicationsAsync_Should_Return_Empty_List_If_Student_Not_Found()
+        {
+            // Act
+            var result = await _studentService.GetStudentApplicationsAsync(999); // Invalid ID
+
+            // Assert
+            result.Should().NotBeNull();
+            result.Should().BeEmpty(); // ✅ Should return an empty list
+        }
 
         //[Fact]
         //public async Task BulkUploadStudentsAsync_Should_Process_Valid_CSV()
