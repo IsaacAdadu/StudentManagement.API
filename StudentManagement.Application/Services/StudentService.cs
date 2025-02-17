@@ -126,12 +126,16 @@ namespace StudentManagement.Application.Services
         public async Task<bool> DeactivateStudentAsync(int id)
         {
             var student = await _context.Students.FindAsync(id);
-            if (student == null) return false;
+            if (student == null || student.IsDeleted)  // Return false if student is already deleted
+            {
+                return false;
+            }
 
-            student.IsDeleted = true;  // Mark as deleted instead of removing from DB
+            student.IsDeleted = true;
             await _context.SaveChangesAsync();
             return true;
         }
+
 
         public async Task<bool> BulkUploadStudentsAsync(IFormFile file)
         {
