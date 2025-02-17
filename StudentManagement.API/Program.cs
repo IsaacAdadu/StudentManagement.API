@@ -1,8 +1,13 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using StudentManagement.API.Filters;
+using StudentManagement.API.Middleware;
+using StudentManagement.Application.DTOs;
 using StudentManagement.Application.Interfaces;
 using StudentManagement.Application.Services;
+using StudentManagement.Application.Validators;
 using StudentManagement.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,11 +20,14 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         b => b.MigrationsAssembly("StudentManagement.Infrastructure") 
     ));
 builder.Services.AddScoped<IStudentService, StudentService>();
+// Register FluentValidation
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddScoped<IValidator<StudentDto>, StudentValidator>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-// ✅ Register Swagger with File Upload Support
+// Register Swagger with File Upload Support
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "Student Management API", Version = "v1" });
@@ -29,6 +37,10 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+
+// register global exception middleware
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
