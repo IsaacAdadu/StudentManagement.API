@@ -20,13 +20,13 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
         b => b.MigrationsAssembly("StudentManagement.Infrastructure") 
     ));
 builder.Services.AddScoped<IStudentService, StudentService>();
-// Register FluentValidation
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddScoped<IValidator<StudentDto>, StudentValidator>();
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+
 // Register Swagger with File Upload Support
 builder.Services.AddSwaggerGen(c =>
 {

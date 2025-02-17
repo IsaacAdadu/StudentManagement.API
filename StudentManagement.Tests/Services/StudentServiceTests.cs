@@ -272,9 +272,6 @@ namespace StudentManagement.Tests.Services
             result.Should().BeEmpty();
         }
 
-        
-
     }
-
 }
 

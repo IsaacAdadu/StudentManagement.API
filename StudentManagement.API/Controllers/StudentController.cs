@@ -15,9 +15,7 @@ namespace StudentManagement.API.Controllers
             _studentService = studentService;
         }
 
-        /// <summary>
-        /// Get all students.
-        /// </summary>
+        
         [HttpGet]
         public async Task<IActionResult> GetStudents(
          [FromQuery] string search = "",
@@ -25,15 +23,11 @@ namespace StudentManagement.API.Controllers
          [FromQuery] string sortDirection = "asc",
          [FromQuery] int page = 1,
           [FromQuery] int pageSize = 10)
-          {
+        {
             var result = await _studentService.GetStudentsAsync(search, sortBy, sortDirection, page, pageSize);
             return Ok(result);
-           }
+        }
 
-
-        /// <summary>
-        /// Get student by ID.
-        /// </summary>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetStudentById(int id)
         {
@@ -44,9 +38,7 @@ namespace StudentManagement.API.Controllers
             return Ok(student);
         }
 
-        /// <summary>
-        /// Add a new student.
-        /// </summary>
+       
         [HttpPost]
         public async Task<IActionResult> AddStudent([FromBody] StudentDto studentDto)
         {
@@ -57,9 +49,7 @@ namespace StudentManagement.API.Controllers
             return CreatedAtAction(nameof(GetStudentById), new { id = student }, student);
         }
 
-        /// <summary>
-        /// Update student details.
-        /// </summary>
+        
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateStudent(int id, [FromBody] StudentDto studentDto)
         {
@@ -73,9 +63,7 @@ namespace StudentManagement.API.Controllers
             return NoContent();
         }
 
-        /// <summary>
-        /// Soft delete a student (Deactivate account)
-        /// </summary>
+        
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeactivateStudent(int id)
         {

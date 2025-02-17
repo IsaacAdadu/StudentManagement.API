@@ -12,7 +12,7 @@ namespace StudentManagement.Application.Interfaces
         Task<PaginatedResult<StudentDto>> GetStudentsAsync(string search, string sortBy, string sortDirection, int page, int pageSize);
         Task<StudentDto> GetStudentByIdAsync(int id);
         Task<bool> UpdateStudentAsync(int id, StudentDto student);
-        Task<bool> DeactivateStudentAsync(int id); // ✅ Rename to reflect soft delete
+        Task<bool> DeactivateStudentAsync(int id); 
         Task<bool> BulkUploadStudentsAsync(IFormFile file);
         Task<IEnumerable<StudentApplication>> GetStudentApplicationsAsync(int studentId);
         Task<byte[]> GenerateStudentReportAsync();

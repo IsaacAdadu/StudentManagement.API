@@ -63,7 +63,7 @@ namespace StudentManagement.Application.Services
                     query = sortDirection == "desc" ? query.OrderByDescending(s => s.EnrollmentDate) : query.OrderBy(s => s.EnrollmentDate);
                     break;
                 default:
-                    query = query.OrderBy(s => s.Id); // Default sort by Id
+                    query = query.OrderBy(s => s.Id); 
                     break;
             }
 
@@ -126,7 +126,7 @@ namespace StudentManagement.Application.Services
         public async Task<bool> DeactivateStudentAsync(int id)
         {
             var student = await _context.Students.FindAsync(id);
-            if (student == null || student.IsDeleted)  // Return false if student is already deleted
+            if (student == null || student.IsDeleted)  
             {
                 return false;
             }
@@ -168,7 +168,7 @@ namespace StudentManagement.Application.Services
                     var result = reader.AsDataSet();
 
                     var dataTable = result.Tables[0];
-                    for (int i = 1; i < dataTable.Rows.Count; i++) // Skip header
+                    for (int i = 1; i < dataTable.Rows.Count; i++) 
                     {
                         var row = dataTable.Rows[i];
                         students.Add(new Student
@@ -204,7 +204,7 @@ namespace StudentManagement.Application.Services
         public async Task<byte[]> GenerateStudentReportAsync()
         {
             var students = await _context.Students
-                .Where(s => !s.IsDeleted) // Exclude soft-deleted students
+                .Where(s => !s.IsDeleted) 
                 .Select(s => new
                 {
                     s.Id,
